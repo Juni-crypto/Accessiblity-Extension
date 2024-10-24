@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Accessible Web Helper",
+  "version": "1.0",
+  "description": "Scans webpages for accessibility issues and provides suggestions.",
+  "permissions": ["scripting", "activeTab"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/test.png",
+      "32": "icons/test.png",
+      "48": "icons/test.png",
+      "128": "icons/test.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["libs/axe.min.js", "injectedScript.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
