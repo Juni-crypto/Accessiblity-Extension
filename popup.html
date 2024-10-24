@@ -10,10 +10,24 @@
   <h1>Accessibility Report</h1>
   <canvas id="accessibilityChart" width="300" height="200"></canvas>
   <p>Your Accessibility Score: <span id="accessibilityScore">Calculating...</span></p>
+
+  <div id="filter-container">
+    <label><input type="checkbox" value="critical" checked> Critical</label>
+    <label><input type="checkbox" value="serious" checked> Serious</label>
+    <label><input type="checkbox" value="moderate" checked> Moderate</label>
+    <label><input type="checkbox" value="minor" checked> Minor</label>
+  </div>
+
   <div id="issues-container">
     <p>Loading issues...</p>
   </div>
-  <script src="libs/Chart.min.js"></script>
+
+  <div id="action-buttons">
+    <button id="exportButton">Export Report</button>
+    <button id="refreshButton">Refresh Analysis</button>
+  </div>
+
+  <script src="libs/chart.min.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

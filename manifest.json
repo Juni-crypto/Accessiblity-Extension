@@ -2,17 +2,19 @@
   "manifest_version": 3,
   "name": "Accessible Web Helper",
   "version": "1.0",
-  "description": "Scans webpages for accessibility issues and provides suggestions.",
-  "permissions": ["scripting", "activeTab"],
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icons/test.png",
-      "32": "icons/test.png",
-      "48": "icons/test.png",
-      "128": "icons/test.png"
-    }
+  "description": "An extension to help improve web accessibility.",
+  "icons": {
+    "16": "icons/test.png",
+    "32": "icons/test.png",
+    "48": "icons/test.png",
+    "128": "icons/test.png"
   },
+  "action": {
+    "default_icon": "icons/test.png",
+    "default_popup": "popup.html"
+  },
+  "author": "Juni - https://chumaoruworks.com",
+  "permissions": ["scripting", "activeTab", "tabs", "storage"],
   "background": {
     "service_worker": "background.js"
   },

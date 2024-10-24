@@ -1,17 +1,38 @@
 // background.js
 
-let axeResults = null;
+let cachedResults = null;
 
-// Listen for messages from content script
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'axeResults') {
-    axeResults = message.results;
-  }
-});
-
-// Provide results to the popup script when requested
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'getAxeResults') {
-    sendResponse({ results: axeResults });
+    if (cachedResults) {
+      sendResponse({ results: cachedResults });
+    } else {
+      runAxeAnalysis((results) => {
+        cachedResults = results;
+        sendResponse({ results });
+      });
+    }
+    return true;
+  } else if (message.type === 'axeResults') {
+    cachedResults = message.results;
+  } else if (message.type === 'refreshAxeAnalysis') {
+    cachedResults = null;
+    runAxeAnalysis((results) => {
+      cachedResults = results;
+      sendResponse({ success: true });
+    });
+    return true;
   }
 });
+
+function runAxeAnalysis(callback) {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'runAxe' }, (response) => {
+      if (response && response.results) {
+        callback(response.results);
+      } else {
+        callback(null);
+      }
+    });
+  });
+}
