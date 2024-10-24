@@ -106,3 +106,18 @@ h2 {
 #action-buttons button {
   margin-right: 10px;
 }
+
+#author-info {
+  margin-top: 15px;
+  font-size: 12px;
+  text-align: center;
+}
+
+#author-info a {
+  color: #0073e6;
+  text-decoration: none;
+}
+
+#author-info a:hover {
+  text-decoration: underline;
+}

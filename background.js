@@ -1,38 +1,23 @@
 // background.js
 
-let cachedResults = null;
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'getAxeResults') {
-    if (cachedResults) {
-      sendResponse({ results: cachedResults });
-    } else {
-      runAxeAnalysis((results) => {
-        cachedResults = results;
-        sendResponse({ results });
-      });
-    }
-    return true;
-  } else if (message.type === 'axeResults') {
-    cachedResults = message.results;
-  } else if (message.type === 'refreshAxeAnalysis') {
-    cachedResults = null;
-    runAxeAnalysis((results) => {
-      cachedResults = results;
-      sendResponse({ success: true });
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        { type: 'getAxeResults' },
+        (response) => {
+          sendResponse({ results: response ? response.results : null });
+        }
+      );
     });
     return true;
-  }
-});
-
-function runAxeAnalysis(callback) {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: 'runAxe' }, (response) => {
-      if (response && response.results) {
-        callback(response.results);
-      } else {
-        callback(null);
+  } else if (message.type === 'highlightNode') {
+    // Send the message to the active tab
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs && tabs.length > 0) {
+        chrome.tabs.sendMessage(tabs[0].id, message);
       }
     });
-  });
-}
+  }
+});

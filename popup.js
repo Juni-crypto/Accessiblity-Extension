@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Impact weights
   const impactWeights = { critical: 5, serious: 3, moderate: 2, minor: 1 };
 
-  // Event Listeners
-  filterContainer.addEventListener('change', () => renderIssues(results.violations));
+  // Event Listeners for buttons
   exportButton.addEventListener('click', exportReport);
   refreshButton.addEventListener('click', refreshAnalysis);
 
@@ -42,6 +41,17 @@ document.addEventListener('DOMContentLoaded', () => {
       scoreElement.textContent = score.toFixed(2);
       renderChart(score);
       renderIssues(results.violations);
+
+      // Add the event listener after results are available
+      filterContainer.addEventListener('change', () => {
+        renderIssues(results.violations);
+      });
+
+      // Enable filters after results are loaded
+      const checkboxes = filterContainer.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach((checkbox) => {
+        checkbox.disabled = false;
+      });
     });
   }
 
@@ -125,12 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const highlightButton = document.createElement('button');
       highlightButton.textContent = 'Highlight';
       highlightButton.addEventListener('click', () => {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          chrome.tabs.sendMessage(tabs[0].id, {
-            type: 'highlightNode',
-            target: node.target,
-          });
-        });
+        // Send the highlightNode message
+        chrome.runtime.sendMessage({ type: 'highlightNode', target: node.target });
       });
 
       details.appendChild(nodeElement);
@@ -202,9 +208,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function refreshAnalysis() {
-    chrome.runtime.sendMessage({ type: 'refreshAxeAnalysis' }, () => {
-      getResults();
+    results = null;
+    scoreElement.textContent = 'Calculating...';
+    issuesContainer.innerHTML = '<p>Loading issues...</p>';
+
+    const checkboxes = filterContainer.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((checkbox) => {
+      checkbox.disabled = true;
     });
+
+    getResults();
   }
 
   function displayError(message) {

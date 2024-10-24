@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Accessible Web Helper</title>
-  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
   <h1>Accessibility Report</h1>
@@ -12,10 +12,10 @@
   <p>Your Accessibility Score: <span id="accessibilityScore">Calculating...</span></p>
 
   <div id="filter-container">
-    <label><input type="checkbox" value="critical" checked> Critical</label>
-    <label><input type="checkbox" value="serious" checked> Serious</label>
-    <label><input type="checkbox" value="moderate" checked> Moderate</label>
-    <label><input type="checkbox" value="minor" checked> Minor</label>
+    <label><input type="checkbox" value="critical" checked disabled /> Critical</label>
+    <label><input type="checkbox" value="serious" checked disabled /> Serious</label>
+    <label><input type="checkbox" value="moderate" checked disabled /> Moderate</label>
+    <label><input type="checkbox" value="minor" checked disabled /> Minor</label>
   </div>
 
   <div id="issues-container">
@@ -26,6 +26,8 @@
     <button id="exportButton">Export Report</button>
     <button id="refreshButton">Refresh Analysis</button>
   </div>
+
+  <p id="author-info">Developed by <a href="https://chumaoruworks.com" target="_blank">Juni</a></p>
 
   <script src="libs/chart.min.js"></script>
   <script src="popup.js"></script>
