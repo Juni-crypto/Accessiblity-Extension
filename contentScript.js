@@ -29,18 +29,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   } else if (message.type === 'getAxeResults') {
     window.postMessage({ type: 'RUN_AXE' }, '*');
 
-    window.addEventListener(
-      'message',
-      function handler(event) {
-        if (event.source !== window) return;
+    function handler(event) {
+      if (event.source !== window) return;
 
-        if (event.data.type && event.data.type === 'FROM_PAGE') {
-          sendResponse({ results: event.data.results });
-          window.removeEventListener('message', handler);
-        }
-      },
-      false
-    );
+      if (event.data.type && event.data.type === 'FROM_PAGE') {
+        sendResponse({ results: event.data.results });
+        window.removeEventListener('message', handler);
+      }
+    }
+
+    window.addEventListener('message', handler, false);
     return true;
   }
 });

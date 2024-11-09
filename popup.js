@@ -17,6 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
   exportButton.addEventListener('click', exportReport);
   refreshButton.addEventListener('click', refreshAnalysis);
 
+  // Add the event listener for filters
+  filterContainer.addEventListener('change', () => {
+    if (results && results.violations) {
+      renderIssues(results.violations);
+    }
+  });
+
   // Initialize
   getResults();
 
@@ -41,11 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
       scoreElement.textContent = score.toFixed(2);
       renderChart(score);
       renderIssues(results.violations);
-
-      // Add the event listener after results are available
-      filterContainer.addEventListener('change', () => {
-        renderIssues(results.violations);
-      });
 
       // Enable filters after results are loaded
       const checkboxes = filterContainer.querySelectorAll('input[type="checkbox"]');
@@ -173,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
       datasets: [
         {
           data: [score, 100 - score],
-          backgroundColor: ['#4CAF50', '#F44336'],
+          backgroundColor: ['#27ae60', '#e74c3c'],
         },
       ],
       labels: ['Accessible', 'Issues'],
@@ -184,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
       options: {
         circumference: 180,
         rotation: 270,
-        cutout: '50%',
+        cutout: '60%',
         plugins: {
           legend: {
             position: 'bottom',
@@ -221,6 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function displayError(message) {
-    issuesContainer.innerHTML = `<p class="error-message">${message}</p>`;
+    issuesContainer.innerHTML = `<p id="error-message">${message}</p>`;
   }
 });
